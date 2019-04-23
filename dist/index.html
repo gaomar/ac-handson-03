@@ -1,0 +1,175 @@
+
+<!doctype html>
+
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <meta name="theme-color" content="#4F7DC9">
+  <meta charset="UTF-8">
+  <title>Amazon Connectハンズオン 03</title>
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
+  <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://storage.googleapis.com/codelab-elements/codelab-elements.css">
+  <style>
+    .success {
+      color: #1e8e3e;
+    }
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <google-codelab-analytics gaid="UA-49880327-14"></google-codelab-analytics>
+  <google-codelab codelab-gaid=""
+                  id="dist"
+                  title="Amazon Connectハンズオン 03"
+                  environment="web"
+                  feedback-link="">
+    
+      <google-codelab-step label="LINE Botチャネルを作ろう" duration="0">
+        <h2 is-upgraded>1-1. プロバイダーを作成する</h2>
+<p>LINE Developersのページにアクセスしてください。</p>
+<p><a href="https://developers.line.biz/ja/" target="_blank">https://developers.line.biz/ja/</a></p>
+<p>［ログイン］ボタンをクリックします。</p>
+<p class="image-container"><img alt="s100" src="img/77d08c6611164fdb.png"></p>
+<p>［LINEアカウントでログイン］をクリックします。</p>
+<p class="image-container"><img alt="s101" src="img/b7399e5df4519d0e.png"></p>
+<p>新規プロバイダーを作成します。既にプロバイダーがある方は既存のものでも問題ありません。</p>
+<p class="image-container"><img alt="s102" src="img/d5528b85575ed167.png"></p>
+<p>プロバイダー名を入力します。これは何でも構いません、お好きなお名前を決めてください。</p>
+<p class="image-container"><img alt="s103" src="img/269e0f4c4baf4575.png"></p>
+<p>［作成する］ボタンをクリックします。</p>
+<p class="image-container"><img alt="s104" src="img/3e799767bef25d8b.png"></p>
+<h2 is-upgraded>1-2. 新規チャネルを作成する</h2>
+<p>［新規チャネル作成］をクリックします。</p>
+<p class="image-container"><img alt="s105" src="img/e8d8593905a52990.png"></p>
+<p>［Messaging API］をクリックします。</p>
+<p class="image-container"><img alt="s106" src="img/7367561d707a91b1.png"></p>
+<p>アプリのアイコンを設定します。アイコンは下記のものを利用してください。</p>
+<p>各項目を埋めていき、［入力内容を確認する］をクリックします。</p>
+<table>
+<tr></tr>
+<tr><td colspan="1" rowspan="1"><p>アプリ名</p>
+</td><td colspan="1" rowspan="1"><p>Amazon Connectハンズオン</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>アプリ説明</p>
+</td><td colspan="1" rowspan="1"><p>Amazon Connectハンズオン</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>大業種</p>
+</td><td colspan="1" rowspan="1"><p>個人</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>小業種</p>
+</td><td colspan="1" rowspan="1"><p>個人（IT・コンピュータ）</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>メールアドレス</p>
+</td><td colspan="1" rowspan="1"><p>あなたのメールアドレス</p>
+</td></tr>
+</table>
+<p class="image-container"><img alt="s107" src="img/c7bb9bf05ca8d5a3.png"></p>
+<p>［同意する］ボタンをクリックします。</p>
+<p class="image-container"><img alt="s108" src="img/e0ed833a1fb600f0.png"></p>
+<p>2つのチェックを入れてから、［作成］ボタンをクリックします。</p>
+<p class="image-container"><img alt="s109" src="img/efd5f042f8eef675.png"></p>
+<p>作成したAmazon Connectハンズオンをクリックします。</p>
+<p class="image-container"><img alt="s110" src="img/b5397778a433e4d3.png"></p>
+<p>メッセージ送受信部分にあるアクセストークンの項目の［再発行］ボタンをクリックします。</p>
+<p class="image-container"><img alt="s111" src="img/c3aa27104efa29fc.png"></p>
+<p>そのまま［再発行］ボタンをクリックします。</p>
+<p class="image-container"><img alt="s112" src="img/e0382136965c418a.png"></p>
+<p>発行されたアクセストークンは後ほど使用しますので、メモしておいてください。</p>
+<p class="image-container"><img alt="s113" src="img/ec8d59ccfc8ac522.png"></p>
+<p>Bot情報部分にあるアプリのQRコードを読み取ってLINE Botと友だちになっておいてください。<br>その下にある、Your user IDも後ほど使用しますので、PCにメモしておいてください。</p>
+<p class="image-container"><img alt="s114" src="img/91cca24e1089bc36.png"></p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="LambdaとLINE Botを連携しよう！" duration="0">
+        <h2 is-upgraded>2-1. Lambda Layerを追加する</h2>
+<p>AWSのLambdaページを開いてください。左側メニューの<code>Layers</code>をクリックして、<br>［レイヤーの作成］ボタンをクリックします。</p>
+<p class="image-container"><img alt="s115" src="img/7065c7def051173d.png"></p>
+<p>各項目を埋めていきます。linebot.zipは下記からダウンロードしてください。</p>
+<p>［作成］ボタンをクリックします。</p>
+<table>
+<tr></tr>
+<tr><td colspan="1" rowspan="1"><p>名前</p>
+</td><td colspan="1" rowspan="1"><p>LINEBot-SDK</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>説明</p>
+</td><td colspan="1" rowspan="1"><p>LINEBot-SDK</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>アップロード</p>
+</td><td colspan="1" rowspan="1"><p>linebot.zip</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>ランタイム</p>
+</td><td colspan="1" rowspan="1"><p>Node.js 8.10</p>
+</td></tr>
+</table>
+<p class="image-container"><img alt="s116" src="img/ded03d8bdf2956aa.png"></p>
+<h2 is-upgraded>2-2. LambdaにLINE Botを適用する</h2>
+<p>左側メニューの［関数］をクリックします。既に作成している<code>AmazonConnect-BMI</code>をクリックします。</p>
+<p class="image-container"><img alt="s117" src="img/6246f5731bfac2ca.png"></p>
+<p>Layersをクリックして、［レイヤーの追加］をクリックします。</p>
+<p class="image-container"><img alt="s118" src="img/d19e0fd98c43392d.png"></p>
+<p>先程作成したレイヤーから<code>LINEBot-SDK</code>を選択し、バージョン1を選択して、［追加］ボタンをクリックします。</p>
+<p class="image-container"><img alt="s119" src="img/e38b693ec25a9f32.png"></p>
+<p>追加したら<code>AmazonConnect-BMI</code>をクリックします。</p>
+<p class="image-container"><img alt="s120" src="img/c3233f93d4fe8b49.png"></p>
+<p>下にスクロールして環境変数に<code>ACCESS_TOKEN</code>と<code>USER_ID</code>を追記します。<br>メモしておいたものをそれぞれ貼り付けます。</p>
+<p class="image-container"><img alt="s121" src="img/eee294d82eab92fd.png"></p>
+<p>index.jsの中身を編集して、右上の［保存］ボタンをクリックします。</p>
+<p class="image-container"><img alt="s122" src="img/63affc0e0d3f8f9d.png"></p>
+<pre><code>const Util = require(&#39;util.js&#39;);
+
+// LINE Botライブラリ
+const line = require(&#39;@line/bot-sdk&#39;);
+const client = new line.Client({
+  // Lambdaの環境変数よりMessagingAPIのチャネルアクセストークンを取得
+  channelAccessToken:  process.env.ACCESS_TOKEN
+});
+
+exports.handler = async (event) =&gt; {
+    
+    // 発信者番号
+    const phoneNumber = event.Details.ContactData.CustomerEndpoint.Address;
+
+    // 発信者番号をDynamoDBに記録
+    await Util.putPhoneNo(phoneNumber);
+    
+    // LINE Botにも着信履歴掲載
+    await client.pushMessage(process.env.USER_ID, { type: &#39;text&#39;, text: `${phoneNumber}から着信` });
+
+    // 身長と体重を取得する
+    const heightVal = event.Details.ContactData.Attributes.HeightVal;
+    const weightVal = event.Details.ContactData.Attributes.WeightVal;
+    
+    // BMI計算
+    const bmiVal = (parseFloat(weightVal) / (parseFloat(heightVal)/100 * parseFloat(heightVal)/100)).toFixed(1);
+
+    // 標準体重
+    const stdWeight = (22 * (parseFloat(heightVal)/100 * parseFloat(heightVal)/100)).toFixed(1);
+
+    // LINE Botにも結果を掲載
+    await client.pushMessage(process.env.USER_ID, { type: &#39;text&#39;, text: `BMIは${bmiVal}\n標準体重は${stdWeight}kg` });
+
+    var speechText = `あなたのBMIは${bmiVal}です。標準体重は${stdWeight}kgです。`;
+
+    return {&#34;BMI&#34;: speechText};
+};
+</code></pre>
+<p>Amazon Connectの電話にかけると、LINE Botに通知が飛んできます。</p>
+<p class="image-container"><img alt="s123" src="img/5a89b01c9a5fd779.png"></p>
+
+
+      </google-codelab-step>
+    
+  </google-codelab>
+
+  <script src="https://storage.googleapis.com/codelab-elements/native-shim.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/custom-elements.min.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/prettify.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/codelab-elements.js"></script>
+
+</body>
+</html>
