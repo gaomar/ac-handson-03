@@ -50,6 +50,7 @@ LINE Developersのページにアクセスしてください。
 ![s106](images/s106.png)
 
 アプリのアイコンを設定します。アイコンは下記のものを利用してください。
+[https://raw.githubusercontent.com/gaomar/ac-handson-03/master/icon/icon.png](https://raw.githubusercontent.com/gaomar/ac-handson-03/master/icon/icon.png)
 
 各項目を埋めていき、［入力内容を確認する］をクリックします。
 
@@ -101,6 +102,7 @@ AWSのLambdaページを開いてください。左側メニューの`Layers`を
 ![s115](images/s115.png)
 
 各項目を埋めていきます。linebot.zipは下記からダウンロードしてください。
+[https://github.com/gaomar/ac-handson-03/raw/master/files/linebot.zip](https://github.com/gaomar/ac-handson-03/raw/master/files/linebot.zip)
 
 ［作成］ボタンをクリックします。
 
