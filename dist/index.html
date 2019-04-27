@@ -164,6 +164,195 @@ exports.handler = async (event) =&gt; {
 
       </google-codelab-step>
     
+      <google-codelab-step label="LINE Bot用問い合わせフローを作成しよう！" duration="0">
+        <h2 is-upgraded>3-1. Bot用問い合わせフローを作成する</h2>
+<p>Amazon Connectから作成したインスタンスエイリアスをクリックします。</p>
+<p class="image-container"><img alt="s160" src="img/3120b37019f83330.png"></p>
+<p>［管理者としてログイン］ボタンをクリックします。</p>
+<p class="image-container"><img alt="s161" src="img/dbe3a71b4562a902.png"></p>
+<p>左側メニューにあるルーティングの［問い合わせフロー］をクリックします。</p>
+<p class="image-container"><img alt="s162" src="img/8431dc373e413f42.png"></p>
+<p>［問い合わせフローの作成］ボタンをクリックします。</p>
+<p class="image-container"><img alt="s163" src="img/3f7cbed17590f7e2.png"></p>
+<p>フローの名前を「LINEBotフロー」を入力します。</p>
+<p class="image-container"><img alt="s164" src="img/5fc51ea0c0afcc.png"></p>
+<p>音声の設定をドラッグアンドドロップして、ブロックをクリックします。<br>音声の種類を決めて［Save］をクリックして、線を結びます。</p>
+<p class="image-container"><img alt="s165" src="img/366180644adbb43b.png"></p>
+<p>プロンプトの再生をドラッグアンドドロップして、ブロックをクリックします。</p>
+<p class="image-container"><img alt="s166" src="img/752b474d298dab4d.png"></p>
+<p>テキストの読み上げを選択して、発話内容を記述します。解釈は<code>SSML</code>を選択して、右下の［Save］ボタンをクリックします。</p>
+<p class="image-container"><img alt="s167" src="img/356cf648f62c2417.png"></p>
+<p>発話内容はこちらをコピペしてください。</p>
+<pre><code>&lt;speak&gt;
+  &lt;break time=&#39;2s&#39; /&gt;
+  ラインから電話依頼をされたのでかけました。それではさようなら。
+&lt;/speak&gt;
+</code></pre>
+<p>線で結びます。<br><img alt="s168" src="img/ea38dacf5fc2d9e.png"></p>
+<p>終了/ 転送カテゴリーから切断/ハングアップをドラッグアンドドロップします。</p>
+<p class="image-container"><img alt="s169" src="img/43c9cf59d4e72e17.png"></p>
+<p>線で結びます。<br><img alt="s170" src="img/6f36dd2be0bdfd5a.png"></p>
+<p>［保存して発行］をクリックします。<br><img alt="s171" src="img/bc8a443a4de9afcf.png"></p>
+<h2 is-upgraded>3-2. IDをメモしておく</h2>
+<p>問い合わせフローの名前の下に「追加のフロー情報の表示」という項目があるので、それを展開します。展開するとARNの情報が表示されるのでinstanceのIDとconstact-flowのIDをそれぞれメモしておきます。</p>
+<p class="image-container"><img alt="s172" src="img/37a85f6ce849e5f9.png"></p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Amazon ConnectとLambdaを連携しよう！" duration="0">
+        <h2 is-upgraded>4-1. Lambda関数を作成する</h2>
+<p>Lambdaから新規で関数を作成します。［関数の作成］ボタンをクリックします。</p>
+<p class="image-container"><img alt="s130" src="img/8c99246ba555faee.png"></p>
+<p>関数は以下の通り入力して、［関数の作成］ボタンをクリックします。</p>
+<table>
+<tr></tr>
+<tr><td colspan="1" rowspan="1"><p>①関数名</p>
+</td><td colspan="1" rowspan="1"><p>AmazonConnect-LINEBot</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>②実行ロール</p>
+</td><td colspan="1" rowspan="1"><p>既存のロールを使用する</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>③既存ロール</p>
+</td><td colspan="1" rowspan="1"><p>server-role/AmazonConnect-Role</p>
+</td></tr>
+</table>
+<p class="image-container"><img alt="s131" src="img/5543cce109f3eeab.png"></p>
+<p>関数が作成されたら、［Layers］をクリックし、下に表示される［レイヤーの追加］ボタンをクリックします。</p>
+<p class="image-container"><img alt="s132" src="img/a1c9c9767cccb3f9.png"></p>
+<p>LineBot-SDKとバージョンを指定して、［追加］ボタンをクリックします。</p>
+<p class="image-container"><img alt="s133" src="img/b63f7871b5f14e3c.png"></p>
+<p>AmazonConnect-LineBot部分をクリックします。</p>
+<p class="image-container"><img alt="s134" src="img/1f3b8ee51ecc407e.png"></p>
+<p>下にスクロールすると実行ロールという項目があるので、［AmazonConnect-Roleロールを表示］リンクをクリックします。</p>
+<p class="image-container"><img alt="s135" src="img/fba0a4c2a09cdd92.png"></p>
+<p>［インラインポリシーの追加］をクリックします。</p>
+<p class="image-container"><img alt="s136" src="img/df0717715a7db1a3.png"></p>
+<p>サービスを展開して、検索窓に「Connect」と入れて検索します。出てきた［Connect］をクリックします。</p>
+<p class="image-container"><img alt="s137" src="img/8b1ccf8fd28152af.png"></p>
+<p>アクションのアクセスレベルにある「書き込み」部分を展開して、その中にある<code>StartOutboundVoiceContact</code>のチェックを入れます。</p>
+<p class="image-container"><img alt="s138" src="img/477078943385911.png"></p>
+<p>すべてのリソースを選択して、右下の［ポリシーの確認］ボタンをクリックします。</p>
+<p class="image-container"><img alt="s139" src="img/9ee73d2d9d7fa867.png"></p>
+<p>ポリシー名を入力します。<code>AmazonConnectPolicy</code>としました。右下の［ポリシーの作成］ボタンをクリックします。</p>
+<p class="image-container"><img alt="s140" src="img/618064e7e1d3c5d9.png"></p>
+<p>Lambda画面に戻り、画面更新するとAmazon Connectの権限が追加されます。</p>
+<p class="image-container"><img alt="s141" src="img/68b50ffd7a2618ca.png"></p>
+<h2 is-upgraded>4-2. API Gatewayを設定する</h2>
+<p>LINE BotがLambdaを実行するためのアクセスURLを発行します。<br>左側メニューから<code>API Gateway</code>をクリックします。</p>
+<p class="image-container"><img alt="s142" src="img/5eedb4670fe3d0d9.png"></p>
+<p>下にスクロールすると、トリガーの設定項目があるのでAPIは「新規APIの作成」を選択し、セキュリティは「オープン」にします。<br>設定できたら、右下の［追加］をクリックします。</p>
+<p class="image-container"><img alt="s143" src="img/fe80e24b962bfb1c.png"></p>
+<p>右上の［保存］ボタンをクリックすると、API GatewayのアクセスURLが発行されます。</p>
+<p class="image-container"><img alt="s144" src="img/bfd99442fa4d1d3b.png"></p>
+<p>アクセスURLは後で使うので、メモしておきます。</p>
+<p class="image-container"><img alt="s145" src="img/1c2eb9b426f1d685.png"></p>
+<h2 is-upgraded>4-3. Lambda関数を編集する</h2>
+<p>AmazonConnect-LineBot部分をクリックして、下に表示されるindex.jsファイルを下記コードに編集します。編集できたら［保存］ボタンをクリックします。</p>
+<p class="image-container"><img alt="s146" src="img/e23b334f7f956854.png"></p>
+<pre><code>const line = require(&#39;@line/bot-sdk&#39;);
+const client = new line.Client({channelAccessToken: process.env.ACCESSTOKEN});
+const AWS = require(&#39;aws-sdk&#39;);
+var connect = new AWS.Connect();
+
+exports.handler = async (event, context) =&gt; {
+    const body = JSON.parse(event.body);
+
+    var phoneNo = body.events[0].message.text;
+    phoneNo = phoneNo.toLowerCase();
+    // 全角→半角
+    phoneNo = phoneNo.replace(/[Ａ-Ｚａ-ｚ０-９]/g, function(s) {
+      return String.fromCharCode(s.charCodeAt(0) - 65248);
+    });
+    // スペース削除
+    phoneNo = phoneNo.replace(/\s+/g, &#39;&#39;);
+    // ハイフンを小文字化
+    phoneNo = phoneNo.split(&#39;－&#39;).join(&#39;-&#39;);
+    // ハイフンを削除
+    phoneNo = phoneNo.split(&#39;-&#39;).join(&#39;&#39;);
+    // ドット削除
+    phoneNo = phoneNo.split(&#39;.&#39;).join(&#39;&#39;);
+    // 括弧削除
+    phoneNo = phoneNo.split(&#39;(&#39;).join(&#39;&#39;);
+    phoneNo = phoneNo.split(&#39;)&#39;).join(&#39;&#39;);
+    phoneNo = phoneNo.split(&#39;（&#39;).join(&#39;&#39;);
+    phoneNo = phoneNo.split(&#39;）&#39;).join(&#39;&#39;);
+    // 先頭が0なら+81にする
+    phoneNo = phoneNo.replace(/^0/, &#39;+81&#39;);
+    // 先頭が数字なら+をつける
+    phoneNo = phoneNo.replace(/^[1-9]/, &#39;+&#39;);
+    
+    const message = {
+        &#39;type&#39;: &#39;text&#39;,
+        &#39;text&#39;: `${body.events[0].message.text}に電話をするよ`
+    };
+
+    var params = {
+        ContactFlowId: process.env.CONTACTFLOWID,
+        DestinationPhoneNumber: phoneNo,
+        InstanceId: process.env.INSTANCEID,
+        SourcePhoneNumber: process.env.SOURCEPHONENUMBER
+    };
+
+    var calling = connect.startOutboundVoiceContact(params, function(err, data) {
+        if (err) {
+          console.log(err);
+        } else {
+          console.log(data);
+        }
+    });
+
+    var response = await client.replyMessage(body.events[0].replyToken, message);
+    const lambdaResponse = {
+        statusCode: 200,
+        headers: { &#34;X-Line-Status&#34; : &#34;OK&#34;},
+        body: &#39;{&#34;result&#34;:&#34;completed&#34;}&#39;
+    };
+    context.succeed(lambdaResponse);
+   
+};
+</code></pre>
+<h2 is-upgraded>4-4. 環境変数を設定する</h2>
+<p>LINE BotのアクセストークンとAmazon Connectの問い合わせフローのIDをそれぞれ設定します。</p>
+<table>
+<tr></tr>
+<tr><td colspan="1" rowspan="1"><p>ACCESSTOKEN</p>
+</td><td colspan="1" rowspan="1"><p>1-2で作成したLINE Botのアクセストークン</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>CONTACTFLOWID</p>
+</td><td colspan="1" rowspan="1"><p>3-2でメモしたcontact-flowのID</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>INSTANCEID</p>
+</td><td colspan="1" rowspan="1"><p>3-2でメモしたinstanceのID</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>SOURCEPHONENUMBER</p>
+</td><td colspan="1" rowspan="1"><p>Amazon Connectで取得した電話番号</p>
+</td></tr>
+</table>
+<p class="image-container"><img alt="s147" src="img/477e9541ed04dbb5.png"></p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="LINE Botと連携しよう" duration="0">
+        <h2 is-upgraded>5-1. LINE BotのWebhookを設定する</h2>
+<p>LINE BotとLambdaを連携するためにLINE BotのWebhook URLを指定します。<br>［編集］ボタンをクリックします。</p>
+<p class="image-container"><img alt="s148" src="img/63f829d3c483c3ba.png"></p>
+<p>API Gatewayで発行したアクセスURLを貼り付けます。［更新］ボタンをクリックします。</p>
+<p class="image-container"><img alt="s149" src="img/968fdc9fc156553.png"></p>
+<p>Webhook送信部分にある編集をクリックします。「利用する」を選択して［更新］ボタンをクリックします。</p>
+<p class="image-container"><img alt="s150" src="img/d1a89a9a023b5896.png"></p>
+<h2 is-upgraded>5-2. LINE Botの設定を変更する</h2>
+<p>自動応答メッセージは利用したくないので、［設定はこちら］のリンクをクリックします。</p>
+<p class="image-container"><img alt="s151" src="img/f95780045114556e.png"></p>
+<p>あいさつメッセージと応答メッセージをそれぞれ<strong>オフ</strong>にします。</p>
+<p class="image-container"><img alt="s152" src="img/d542fa67005c6ab4.png"></p>
+<p>これでLINE Botに電話をかけたい番号を入力するとAmazon Connectから電話がかかってきます。くれぐれも電話番号の入力ミスには気をつけてください。</p>
+<p class="image-container"><img alt="s153" src="img/c87c3a9a7e9d49dd.png"></p>
+
+
+      </google-codelab-step>
+    
   </google-codelab>
 
   <script src="https://storage.googleapis.com/codelab-elements/native-shim.js"></script>
